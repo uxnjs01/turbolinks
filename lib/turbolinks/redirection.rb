@@ -4,7 +4,7 @@ module Turbolinks
       turbolinks = options.delete(:turbolinks)
       value = super(url, options)
 
-      if turbolinks || (turbolinks != false && request.xhr? && (options.size > 0 || !request.get?))
+      if turbolinks != false && request.xhr? && !request.get?
         visit_options = {
           action: turbolinks.to_s == "advance" ? turbolinks : "replace"
         }

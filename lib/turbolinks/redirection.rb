@@ -10,7 +10,7 @@ module Turbolinks
           }
 
           script = []
-          script << "Turbolinks.clearCache()" unless request.get?
+          script << "Turbolinks.clearCache()"
           script << "Turbolinks.visit(#{location.to_json}, #{visit_options.to_json})"
 
           self.status = 200

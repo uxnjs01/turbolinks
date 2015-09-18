@@ -132,6 +132,7 @@ class Turbolinks.Controller
 
   createVisit: (location, action, historyChanged) ->
     visit = new Turbolinks.Visit this, location, action, historyChanged
+    visit.referrer = @location
     visit.then(@visitFinished)
     visit
 

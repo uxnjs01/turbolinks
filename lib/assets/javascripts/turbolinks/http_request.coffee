@@ -1,6 +1,7 @@
 class Turbolinks.HttpRequest
-  constructor: (@delegate, location) ->
+  constructor: (@delegate, location, referrer) ->
     @url = Turbolinks.Location.box(location).requestURL
+    @referrer = Turbolinks.Location.box(referrer)
     @createXHR()
 
   send: ->
@@ -51,6 +52,7 @@ class Turbolinks.HttpRequest
     @xhr = new XMLHttpRequest
     @xhr.open("GET", @url, true)
     @xhr.setRequestHeader("Accept", "text/html, application/xhtml+xml, application/xml")
+    @xhr.setRequestHeader("X-XHR-Referer", @referrer.absoluteURL) if @referrer?
     @xhr.onprogress = @requestProgressed
     @xhr.onloadend = @requestLoaded
     @xhr.onerror = @requestFailed

@@ -41,7 +41,7 @@ class Turbolinks.Visit
     @promise.catch(arguments...)
 
   changeHistory: ->
-    unless @historyChanged
+    unless @historyChanged or @location.absoluteURL is @referrer?.absoluteURL
       method = getHistoryMethodForAction(@action)
       @controller[method](@location)
       @historyChanged = true
@@ -49,7 +49,7 @@ class Turbolinks.Visit
   issueRequest: ->
     if @shouldIssueRequest() and not @request?
       @progress = 0
-      @request = new Turbolinks.HttpRequest this, @location
+      @request = new Turbolinks.HttpRequest this, @location, @referrer
       @request.send()
 
   hasSnapshot: ->

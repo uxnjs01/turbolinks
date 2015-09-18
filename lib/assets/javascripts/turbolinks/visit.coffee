@@ -76,6 +76,11 @@ class Turbolinks.Visit
           @adapter.visitResponseLoaded?(this)
           @complete()
 
+  followRedirect: ->
+    if @redirectedToLocation and not @followedRedirect
+      @controller.replaceHistory(@redirectedToLocation)
+      @followedRedirect = true
+
   # HTTP Request delegate
 
   requestStarted: ->
@@ -84,7 +89,8 @@ class Turbolinks.Visit
   requestProgressed: (@progress) ->
     @adapter.visitRequestProgressed?(this)
 
-  requestCompletedWithResponse: (@response) ->
+  requestCompletedWithResponse: (@response, redirectedToLocation) ->
+    @redirectedToLocation = Turbolinks.Location.box(redirectedToLocation)
     @adapter.visitRequestCompleted(this)
 
   requestFailedWithStatusCode: (statusCode, @response) ->

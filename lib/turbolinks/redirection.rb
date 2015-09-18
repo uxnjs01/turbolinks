@@ -1,5 +1,11 @@
 module Turbolinks
   module Redirection
+    extend ActiveSupport::Concern
+
+    included do
+      before_action :set_xhr_redirected_to_header_from_session
+    end
+
     def redirect_to(url = {}, options = {})
       turbolinks = options.delete(:turbolinks)
       
@@ -19,5 +25,22 @@ module Turbolinks
         end
       end
     end
+
+    def _compute_redirect_to_location(*args)
+      super.tap { |url| store_xhr_redirected_to_in_session(url) }
+    end
+
+    private
+      def store_xhr_redirected_to_in_session(url)
+        if session && request.headers["X-XHR-Referer"]
+          session[:_xhr_redirected_to] = url
+        end
+      end
+
+      def set_xhr_redirected_to_header_from_session
+        if session && xhr_redirected_to = session.delete(:_xhr_redirected_to)
+          response.headers['X-XHR-Redirected-To'] = xhr_redirected_to
+        end
+      end
   end
 end

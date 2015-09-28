@@ -3,7 +3,11 @@ require 'turbolinks/redirection'
 
 module Turbolinks
   module Controller
-    include Redirection
+    extend ActiveSupport::Concern
+
+    included do
+      include Redirection
+    end
   end
 
   class Engine < ::Rails::Engine

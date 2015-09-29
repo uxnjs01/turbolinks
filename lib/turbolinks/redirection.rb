@@ -40,8 +40,8 @@ module Turbolinks
       end
 
       def set_turbolinks_location_header_from_session
-        if session && location = session.delete(:_turbolinks_location)
-          response.headers["Turbolinks-Location"] = location
+        if session && session[:_turbolinks_location]
+          response.headers["Turbolinks-Location"] = session.delete(:_turbolinks_location)
         end
       end
   end

@@ -22,8 +22,10 @@ Turbolinks.defer = (callback) ->
 
 
 Turbolinks.dispatch = (eventName, {target, cancelable, data} = {}) ->
-  event = document.createEvent("Events")
-  event.initEvent(eventName, true, cancelable is true)
+  event = new CustomEvent(eventName,
+    bubbles: true, 
+    cancelable: cancelable is true
+  )
   event.data = data
   (target ? document).dispatchEvent(event)
   event
